@@ -1,1 +1,32 @@
+@import "@fontsource-variable/archivo/wdth.css";
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Archivo Variable", ui-sans-serif, system-ui, sans-serif;
+  --color-boya: #e4e5e1;
+  --color-sac: #f4f4f1;
+  --color-dokum: #1b2024;
+  --color-gri: #5d6469;
+  --color-kirmizi: #d93025;
+  --color-amber: #f2a900;
+  --color-yesil: #2e8b57;
+}
+
+html { background: var(--color-boya); color: var(--color-dokum); }
+body { font-family: var(--font-sans); line-height: 1.5; }
+.plaka { font-stretch: 125%; font-weight: 800; letter-spacing: -0.01em; line-height: 1.05; }
+.seri { font-variant-numeric: tabular-nums; font-stretch: 110%; }
+:focus-visible { outline: 3px solid var(--color-dokum); outline-offset: 3px; }
+.btn { border-radius: 2px; background: var(--color-dokum); color: var(--color-sac); padding: .7rem 1.1rem; font-weight: 600; }
+.btn:hover { background: #000; }
+.btn:disabled { opacity: .5; }
+.btn-ghost { border: 2px solid var(--color-dokum); border-radius: 2px; padding: .45rem .8rem; font-weight: 600; }
+.btn-ghost:hover { background: var(--color-dokum); color: var(--color-sac); }
+.alan { width: 100%; border: 2px solid var(--color-dokum); border-radius: 2px; background: var(--color-sac); padding: .7rem .8rem; }
+
+@media print {
+  body * { visibility: hidden; }
+  .yazdir, .yazdir * { visibility: visible; }
+  .yazdir { position: absolute; inset: 0; }
+  .etiket { break-inside: avoid; }
+}

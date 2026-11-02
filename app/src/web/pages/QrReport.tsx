@@ -35,35 +35,55 @@ export default function QrReport() {
     }
   }
 
-  if (state === 'loading') return <p className="p-6">Yükleniyor…</p>;
-  if (state === 'notfound') return <p className="p-6">Bu QR kod geçerli değil.</p>;
+  const lamp = (on: 'kirmizi' | 'amber' | 'yesil') => (
+    <div className="flex w-12 flex-col gap-1.5 rounded-md bg-dokum p-1.5" aria-hidden="true">
+      {(['kirmizi', 'amber', 'yesil'] as const).map((k) => (
+        <div key={k} className="aspect-square rounded-full"
+          style={{ background: `var(--color-${k})`, opacity: k === on ? 1 : 0.16, boxShadow: k === on ? `0 0 16px 3px var(--color-${k})` : 'none' }} />
+      ))}
+    </div>
+  );
+
+  if (state === 'loading') return <p className="p-6 text-gri">Yükleniyor…</p>;
+  if (state === 'notfound')
+    return (
+      <main className="mx-auto max-w-md p-6">
+        <h1 className="plaka text-2xl">Bu QR kod geçerli değil</h1>
+        <p className="mt-2 text-gri">Etiket değişmiş olabilir. Bakım ekibinize haber verin.</p>
+      </main>
+    );
   if (state === 'done')
     return (
-      <main className="p-6 text-center">
-        <h1 className="text-2xl font-bold">Bildirim alındı</h1>
-        <p className="mt-2 text-neutral-400">{machine} için arıza kaydı bakım ekibine iletildi.</p>
+      <main className="mx-auto flex max-w-md items-center gap-5 p-6">
+        {lamp('kirmizi')}
+        <div>
+          <h1 className="plaka text-2xl">Bildirim alındı</h1>
+          <p className="mt-2 text-gri">{machine} için arıza kaydı bakım ekibine iletildi.</p>
+        </div>
       </main>
     );
 
   return (
-    <main className="mx-auto max-w-md p-6">
-      <p className="text-sm text-neutral-400">Arıza bildir</p>
-      <h1 className="text-2xl font-bold">{machine}</h1>
-      <form onSubmit={submit} className="mt-6 space-y-4">
+    <main className="mx-auto max-w-md p-5">
+      <div className="flex items-center gap-4">
+        {lamp('yesil')}
+        <div>
+          <p className="text-sm text-gri">Arıza bildir</p>
+          <h1 className="plaka text-3xl">{machine}</h1>
+        </div>
+      </div>
+      <form onSubmit={submit} className="mt-6 space-y-4 border-2 border-dokum bg-sac p-5">
         <label className="block">
-          <span className="text-sm">Sorun nedir?</span>
+          <span className="font-semibold">Sorun nedir?</span>
           <textarea required minLength={3} maxLength={1000} rows={4} value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-900 p-3" />
+            onChange={(e) => setDescription(e.target.value)} className="alan mt-1" />
         </label>
         <label className="block">
-          <span className="text-sm">Adınız (isteğe bağlı)</span>
-          <input maxLength={80} value={name} onChange={(e) => setName(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-900 p-3" />
+          <span className="font-semibold">Adınız (isteğe bağlı)</span>
+          <input maxLength={80} value={name} onChange={(e) => setName(e.target.value)} className="alan mt-1" />
         </label>
-        {state === 'error' && <p className="text-red-400">Gönderilemedi, tekrar deneyin.</p>}
-        <button disabled={state === 'sending'}
-          className="w-full rounded-lg bg-white py-3 font-semibold text-neutral-950 disabled:opacity-50">
+        {state === 'error' && <p role="alert" className="font-medium text-kirmizi">Gönderilemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.</p>}
+        <button disabled={state === 'sending'} className="btn w-full">
           {state === 'sending' ? 'Gönderiliyor…' : 'Arızayı bildir'}
         </button>
       </form>
