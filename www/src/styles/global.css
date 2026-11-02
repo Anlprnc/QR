@@ -1,1 +1,23 @@
+@import "@fontsource-variable/archivo/wdth.css";
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Archivo Variable", ui-sans-serif, system-ui, sans-serif;
+  --color-boya: #e4e5e1;      /* makine boyası grisi */
+  --color-sac: #f4f4f1;       /* sac levha */
+  --color-dokum: #1b2024;     /* döküm mürekkebi */
+  --color-gri: #5d6469;
+  --color-kirmizi: #d93025;   /* andon: arıza */
+  --color-amber: #f2a900;     /* andon: müdahale */
+  --color-yesil: #2e8b57;     /* andon: çalışıyor */
+}
+
+html { background: var(--color-boya); color: var(--color-dokum); }
+body { font-family: var(--font-sans); font-stretch: 100%; line-height: 1.55; }
+.plaka { font-stretch: 125%; font-weight: 800; letter-spacing: -0.01em; line-height: 1.02; }
+.seri { font-variant-numeric: tabular-nums; font-stretch: 110%; }
+:focus-visible { outline: 3px solid var(--color-dokum); outline-offset: 3px; }
+
+.lamba { transition: opacity .35s ease, box-shadow .35s ease; opacity: .16; }
+.lamba[data-on="true"] { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .lamba { transition: none; } }
