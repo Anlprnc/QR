@@ -1,0 +1,72 @@
+---
+import Page from '../layouts/Page.astro';
+const faq = [
+  { q: 'Arıza takip programı ile bakım yönetim yazılımı (CMMS) aynı şey mi?', a: 'Birbirine çok yakın. Arıza takip programı, arızanın bildirilmesi ve kapatılmasına odaklanır. Bakım yönetim yazılımı buna periyodik bakım planı, yedek parça ve maliyet takibini de ekler. Küçük atölyeler genellikle önce arıza takibiyle başlar.' },
+  { q: 'Excel yeterli olmaz mı?', a: 'Tek kişinin yönettiği birkaç makine için yeterli olabilir. Arızayı bildiren kişi ile bakım yapan kişi farklıysa ve bildirimin anında ulaşması gerekiyorsa, Excel bildirim göndermediği için yetersiz kalır.' },
+  { q: 'Programı kullanmak için operatörün eğitim alması gerekir mi?', a: 'İyi bir program için gerekmemeli. Operatörün yapacağı iş makineyi seçmek ve sorunu bir iki cümleyle yazmaktır. QR kodlu sistemlerde makineyi seçme adımı da kod okutunca otomatik olur.' },
+];
+---
+<Page
+  title="Arıza Takip Programı Nedir? Küçük Atölyeler İçin Seçim Rehberi | ArızaQR"
+  description="Arıza takip programı nedir, hangi özellikleri olmalı, Excel ve WhatsApp'tan farkı ne? Küçük imalatçılar için seçerken bakılacak kriterler."
+  h1="Arıza takip programı nedir, nasıl seçilir?"
+  path="/ariza-takip-programi"
+  faq={faq}
+>
+  <p>
+    Arıza takip programı, bir makinenin bozulduğunu bildirmenizi, bu bildirimi doğru kişiye ulaştırmanızı ve arızanın ne zaman,
+    kim tarafından kapatıldığını kayıt altında tutmanızı sağlayan yazılımdır. Amaç, arızanın kaybolmamasıdır.
+  </p>
+
+  <h2>Arıza takibi neden dağınık kalır?</h2>
+  <p>Küçük atölyelerde arıza genellikle şu yollardan biriyle haber verilir:</p>
+  <ul>
+    <li>Operatör ustabaşına sözlü söyler, usta unutur.</li>
+    <li>WhatsApp grubuna yazılır, mesaj akışında kaybolur.</li>
+    <li>Kâğıda yazılır, kâğıt masada kalır.</li>
+  </ul>
+  <p>
+    Bunların ortak sorunu şudur: arıza kimin üzerinde, ne zamandır bekliyor ve bu makine geçen ay kaç kez bozuldu sorularının cevabı
+    kimsede yoktur. Makine bazlı kayıt tutulmadığı için aynı arıza tekrar tekrar çıkar ve kimse örüntüyü görmez.
+  </p>
+
+  <h2>Küçük bir atölye için programda olması gerekenler</h2>
+  <ol>
+    <li><strong>Makine bazlı kayıt.</strong> Her arıza bir makineye bağlı olmalı. Böylece bir makinenin geçmişine bakabilirsiniz.</li>
+    <li><strong>Kolay bildirim.</strong> Operatör birkaç dokunuşla bildirebilmeli. Giriş yapmak veya uygulama kurmak zorunda olmamalı.</li>
+    <li><strong>Anında haber.</strong> Bildirim, bakım yapacak kişiye telefon bildirimi veya e-posta olarak ulaşmalı.</li>
+    <li><strong>Net durumlar.</strong> Arıza açık mı, biri üstlendi mi, çözüldü mü, bir bakışta görünmeli.</li>
+    <li><strong>Geçmiş.</strong> Çözülen arızalar silinmemeli, makineye göre aranabilmeli.</li>
+    <li><strong>Telefonda rahat çalışma.</strong> Atölyede bilgisayar başında kimse oturmaz, ekran telefona göre tasarlanmış olmalı.</li>
+  </ol>
+
+  <h2>Küçük atölyenin ilk günden ihtiyacı olmayanlar</h2>
+  <p>
+    Büyük bakım yönetim yazılımları periyodik bakım planı, yedek parça envanteri, satın alma ve maliyet raporları gibi çok şey sunar.
+    Bunlar değerlidir ama kurulumu ve öğrenmesi zaman alır. Arızaların kaybolduğu bir yerde önce arıza takibini oturtmak daha gerçekçi bir başlangıçtır.
+    Gerekirse sonra planlı bakıma geçilir.
+  </p>
+
+  <h2>Seçmeden önce kendinize sorun</h2>
+  <ul>
+    <li>Operatörlerimin telefonunda internet var mı? Atölyede Wi-Fi çekiyor mu?</li>
+    <li>Arızayı kim görecek? Bir kişi mi, vardiyaya göre farklı kişiler mi?</li>
+    <li>Programa kaç kişi giriş yapacak ve bu kişi başı ücret yüzünden pahalıya mı çıkacak?</li>
+    <li>Verilerim dışarı aktarılabiliyor mu? Bir gün programı bırakırsam kayıtlarım benimle kalıyor mu?</li>
+    <li>Kişisel verileri (çalışan adı gibi) nasıl işliyor? KVKK konusunda sözleşme sunuyor mu?</li>
+  </ul>
+
+  <h2>Excel mi, program mı?</h2>
+  <p>
+    Birkaç makineniz varsa ve arıza bildirimini tek kişi alıyorsa Excel işinizi görür. Şu işaretlerden biri varsa program daha mantıklıdır:
+    arızayı bildirenle bakım yapan farklı kişilerse, arıza vardiya değişiminde kayboluyorsa, hangi makinenin ne kadar durduğunu bilmek istiyorsanız
+    ya da müşteriye ya da denetime kayıt göstermeniz gerekiyorsa.
+  </p>
+
+  <h2>ArızaQR bu işe nasıl yaklaşıyor?</h2>
+  <p>
+    ArızaQR, yukarıdaki listeyi küçük atölyeye göre sade tutar. Her makineye bir <a href="/qr-kodlu-ariza-bildirimi">QR etiketi</a> yapıştırılır.
+    Operatör telefonla okutur, sorunu yazar. Bakım ekibi panoda arızayı görür, üstlenir ve kapatır. Başlamadan önce kâğıt üzerinde denemek isterseniz
+    <a href="/ariza-kayit-formu-sablonu">arıza kayıt formu şablonunu</a> kullanabilirsiniz.
+  </p>
+</Page>

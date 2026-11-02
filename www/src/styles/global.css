@@ -21,3 +21,16 @@ body { font-family: var(--font-sans); font-stretch: 100%; line-height: 1.55; }
 .lamba { transition: opacity .35s ease, box-shadow .35s ease; opacity: .16; }
 .lamba[data-on="true"] { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .lamba { transition: none; } }
+
+/* Rehber sayfaları için okunur metin */
+.yazi { max-width: 65ch; font-size: 1.0625rem; line-height: 1.75; }
+.yazi h2 { font-stretch: 125%; font-weight: 800; font-size: 1.6rem; line-height: 1.15; margin: 2.5rem 0 .75rem; }
+.yazi h3 { font-weight: 700; font-size: 1.15rem; margin: 1.75rem 0 .4rem; }
+.yazi p { margin: .9rem 0; }
+.yazi ul, .yazi ol { margin: .9rem 0; padding-left: 1.4rem; }
+.yazi ul { list-style: disc; } .yazi ol { list-style: decimal; }
+.yazi li { margin: .35rem 0; }
+.yazi a { text-decoration: underline; text-underline-offset: 4px; font-weight: 600; }
+.yazi table { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: .95rem; }
+.yazi th, .yazi td { border: 2px solid var(--color-dokum); padding: .55rem .7rem; text-align: left; vertical-align: top; }
+.yazi th { background: var(--color-sac); }

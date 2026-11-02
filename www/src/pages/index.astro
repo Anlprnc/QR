@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 import AndonDemo from '../components/AndonDemo';
 import SpotlightCard from '../components/react-bits/SpotlightCard';
 
@@ -24,10 +26,7 @@ const faq = [
   title="ArızaQR | QR Kodlu Arıza Takip Programı"
   description="Makineye QR kod yapıştırın, arıza bildirimi telefondan saniyeler içinde gelsin. Küçük imalatçılar için basit arıza ve bakım takip yazılımı."
 >
-  <header class="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
-    <a href="/" class="plaka text-xl">ArızaQR</a>
-    <a href="/fiyatlar" class="font-semibold underline decoration-2 underline-offset-4">Fiyatlar</a>
-  </header>
+  <SiteHeader />
 
   <main>
     <section class="mx-auto grid max-w-6xl gap-12 px-5 pb-20 pt-10 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:pt-16">
@@ -83,9 +82,7 @@ const faq = [
     </section>
   </main>
 
-  <footer class="border-t-2 border-dokum">
-    <p class="mx-auto max-w-6xl px-5 py-8 text-sm text-gri">ArızaQR, küçük imalatçılar için arıza ve bakım takip programı.</p>
-  </footer>
+  <SiteFooter />
 
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',

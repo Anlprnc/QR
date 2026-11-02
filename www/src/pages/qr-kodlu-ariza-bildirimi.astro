@@ -1,0 +1,54 @@
+---
+import Page from '../layouts/Page.astro';
+const faq = [
+  { q: 'QR kod okutmak için operatörün özel bir uygulama kurması gerekir mi?', a: 'Hayır. Güncel telefonların kamerası QR kodu tanır ve tarayıcıda açar. Ayrı bir uygulama gerekmez.' },
+  { q: 'Atölyede internet çekmiyorsa ne olur?', a: 'Bildirim için telefonun mobil verisi ya da atölye Wi-Fi ağı gerekir. Çekmeyen bölgeler varsa Wi-Fi sinyalini güçlendirmek ya da o bölgeye sabit bir tablet koymak çözüm olabilir.' },
+  { q: 'Telefonu olmayan operatör arıza bildirebilir mi?', a: 'Ortak bir tablet ya da vardiya amirinin telefonu kullanılabilir. QR kod aynı olduğu için hangi cihazdan okutulduğu önemli değildir.' },
+];
+---
+<Page
+  title="QR Kodlu Arıza Bildirimi Nasıl Kurulur? | ArızaQR"
+  description="Makineye QR etiketi yapıştırarak arıza bildirimi toplamak: nasıl çalışır, etiket nereye yapıştırılır, atölyede nelere dikkat edilir."
+  h1="QR kodlu arıza bildirimi nasıl kurulur?"
+  path="/qr-kodlu-ariza-bildirimi"
+  faq={faq}
+>
+  <p>
+    QR kodlu arıza bildiriminde her makinenin üzerinde bir QR etiketi bulunur. Operatör arıza gördüğünde telefonunun kamerasıyla etiketi okutur,
+    açılan formda sorunu yazar ve gönderir. Form hangi makineden geldiğini zaten bildiği için makine adı seçmek ya da yazmak gerekmez.
+  </p>
+
+  <h2>Neden QR kod?</h2>
+  <ul>
+    <li><strong>Hata azalır.</strong> Bildirim hangi makineye aitse oraya bağlanır, yanlış makine adı yazılması olmaz.</li>
+    <li><strong>Hız kazandırır.</strong> Makinenin başındayken birkaç saniyede bildirim yapılır, "sonra söylerim" demeye gerek kalmaz.</li>
+    <li><strong>Kurulum gerektirmez.</strong> Uygulama indirme ve giriş yok. Etiketi yapıştırmak yeterli.</li>
+  </ul>
+
+  <h2>Adım adım kurulum</h2>
+  <ol>
+    <li><strong>Makine listesini çıkarın.</strong> Her makineye anlaşılır bir ad verin ("CNC Torna 1", "Abkant 2" gibi). Aynı türden makineleri numaralayın.</li>
+    <li><strong>Her makine için bir QR etiketi oluşturun.</strong> Etiket üzerinde makine adı da yazsın ki kod okunmasa bile hangi makine olduğu anlaşılsın.</li>
+    <li><strong>Etiketi basın ve koruyun.</strong> Yağ, talaş ve toz etiketin okunmasını bozar. Dayanıklı etiket kâğıdı ya da laminasyon kullanın.</li>
+    <li><strong>Doğru yere yapıştırın.</strong> Operatörün kolayca görüp telefonu tutabileceği bir yer seçin. Sürekli titreyen, ısınan ya da sürekli silinen yüzeylerden kaçının.</li>
+    <li><strong>Kendiniz deneyin.</strong> Her etiketi bir telefonla okutup formun açıldığını kontrol edin.</li>
+    <li><strong>Ekibe kısaca anlatın.</strong> "Arıza gördüğünüzde etiketi okutun" cümlesi çoğu zaman yeterli olur. Bir kez birlikte deneyin.</li>
+  </ol>
+
+  <h2>Atölyede dikkat edilecekler</h2>
+  <h3>İnternet erişimi</h3>
+  <p>Bildirim internet üzerinden gittiği için atölyenin her köşesinde telefonun çekip çekmediğine bakın. Çekmeyen yerlerde Wi-Fi sinyalini güçlendirmek gerekebilir.</p>
+  <h3>Telefon olmayan operatörler</h3>
+  <p>Herkesin cebinde iş için kullanabileceği telefon olmayabilir. Hat başına sabit bir tablet ya da vardiya amirinin telefonu bu durumda kullanılabilir.</p>
+  <h3>Gerçek acil durumlar</h3>
+  <p>QR bildirimi bir iş güvenliği önlemi değildir. Can güvenliğini ilgilendiren durumlarda makine durdurulur ve doğrudan sorumlu kişiye haber verilir.</p>
+  <h3>Bildirim kalitesi</h3>
+  <p>"Bozuldu" yazan bir bildirim işe yaramaz. Operatöre "ne oldu, ne duydun, ne gördün" diye üç soruyu hatırlatmak bildirimleri çok daha faydalı yapar.</p>
+
+  <h2>Bildirimden sonra ne olur?</h2>
+  <p>
+    Bildirim bakım ekibinin panosuna düşer. Biri arızayı üstlenir, bitince kapatır. Hangi makine ne sıklıkla arızalanıyor, hangi arıza ne kadar bekliyor,
+    zamanla görünür olur. Daha geniş bir çerçeve için <a href="/ariza-takip-programi">arıza takip programı rehberine</a> bakabilirsiniz.
+    Sistemi kurmadan önce işin akışını kâğıtta denemek isterseniz <a href="/ariza-kayit-formu-sablonu">arıza kayıt formu şablonunu</a> yazdırabilirsiniz.
+  </p>
+</Page>

@@ -1,0 +1,69 @@
+---
+import Page from '../layouts/Page.astro';
+const rows = [
+  ['Tarih ve saat', 'Arızanın fark edildiği an', 'Duruş süresini hesaplamak için'],
+  ['Makine', 'Makinenin adı ya da numarası', 'Hangi makinenin sık bozulduğunu görmek için'],
+  ['Bildiren kişi', 'Arızayı fark eden kişi', 'Ek bilgi gerekirse kime soracağınızı bilmek için'],
+  ['Arıza tanımı', 'Ne oldu, ne duyuldu, ne görüldü', 'Teknisyen gelmeden önce fikir sahibi olsun'],
+  ['Makine durdu mu?', 'Evet / Hayır / Yavaş çalışıyor', 'Önceliği belirlemek için'],
+  ['Müdahale eden', 'İşi üstlenen kişi', 'Sorumluluk net olsun'],
+  ['Yapılan işlem', 'Ne yapıldı, neden', 'Aynı arıza tekrarlarsa çözüm bilinsin'],
+  ['Değiştirilen parça', 'Parça adı ve adedi', 'Yedek parça ihtiyacını görmek için'],
+  ['Bitiş tarihi ve saati', 'Makinenin tekrar çalıştığı an', 'Duruş süresini hesaplamak için'],
+];
+const faq = [
+  { q: 'Bu formu ücretsiz kullanabilir miyim?', a: 'Evet. Sayfayı yazdırabilir ya da içeriğini kendi formunuza taşıyabilirsiniz.' },
+  { q: 'Duruş süresini nasıl hesaplarım?', a: 'Bitiş saatinden arızanın fark edildiği saati çıkarırsınız. Örneğin 09.15 ile 11.45 arası 2 saat 30 dakikadır.' },
+];
+---
+<Page
+  title="Arıza Kayıt Formu Şablonu (Yazdırılabilir) | ArızaQR"
+  description="Makine arızası için yazdırılabilir kayıt formu şablonu. Hangi bilgilerin tutulması gerektiğini ve neden gerektiğini gösteren alanlar."
+  h1="Arıza kayıt formu şablonu"
+  path="/ariza-kayit-formu-sablonu"
+  faq={faq}
+>
+  <p>
+    Makine arızalarını kayıt altına almak için aşağıdaki alanlar yeterli bir başlangıçtır. Her alanın neden orada olduğunu da yanına yazdık,
+    böylece formu kendi atölyenize göre kısaltabilir ya da genişletebilirsiniz.
+  </p>
+
+  <table>
+    <thead><tr><th scope="col">Alan</th><th scope="col">Ne yazılır</th><th scope="col">Neden gerekli</th></tr></thead>
+    <tbody>
+      {rows.map((r) => <tr><th scope="row">{r[0]}</th><td>{r[1]}</td><td>{r[2]}</td></tr>)}
+    </tbody>
+  </table>
+
+  <p class="print:hidden">
+    <button type="button" id="yazdir" class="rounded-sm bg-dokum px-5 py-3 font-semibold text-sac hover:bg-black">Formu yazdır</button>
+  </p>
+
+  <h2>Boş form</h2>
+  <div class="border-2 border-dokum bg-sac p-4">
+    {rows.map((r) => (
+      <div class="grid gap-1 border-b border-dokum/40 py-3 last:border-b-0 sm:grid-cols-[12rem_1fr]">
+        <span class="font-semibold">{r[0]}</span>
+        <span class="min-h-8 border-b border-dokum/60"></span>
+      </div>
+    ))}
+  </div>
+
+  <h2>Formu kullanırken</h2>
+  <ul>
+    <li>Her arıza için ayrı bir form doldurun, birkaç arızayı tek forma yazmayın.</li>
+    <li>Arıza tanımını operatör kendi cümleleriyle yazsın. "Mil dönerken ses yapıyor" gibi.</li>
+    <li>Formları makine adına göre dosyalayın. Birkaç ay sonra hangi makinenin sık bozulduğunu görebilirsiniz.</li>
+  </ul>
+
+  <h2>Kâğıt formun sınırları</h2>
+  <p>
+    Kâğıt form bir başlangıç için iyidir ama bildirimi anında ulaştırmaz, kaybolabilir ve toplamak için elle iş gerektirir.
+    Aynı bilgileri telefonla toplamak için <a href="/qr-kodlu-ariza-bildirimi">QR kodlu arıza bildirimine</a> bakabilirsiniz.
+    Daha geniş bir bakış için <a href="/ariza-takip-programi">arıza takip programı rehberi</a> var.
+  </p>
+
+  <script>
+    document.getElementById('yazdir')?.addEventListener('click', () => window.print());
+  </script>
+</Page>
