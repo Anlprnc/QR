@@ -1,5 +1,6 @@
 ---
 interface Props { title: string; description: string; path?: string }
+import '../styles/global.css';
 const { title, description, path = Astro.url.pathname } = Astro.props;
 const canonical = new URL(path, Astro.site).toString();
 const ld = {
@@ -24,5 +25,5 @@ const ld = {
     <meta property="og:locale" content="tr_TR" />
     <script type="application/ld+json" set:html={JSON.stringify(ld)} />
   </head>
-  <body><slot /></body>
+  <body class="bg-neutral-950 text-neutral-100 antialiased"><slot /></body>
 </html>

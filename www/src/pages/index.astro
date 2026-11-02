@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import ShinyText from '../components/react-bits/ShinyText';
+import SpotlightCard from '../components/react-bits/SpotlightCard';
 const steps = [
   { t: 'Makineye QR yapıştır', d: 'Her makine için bir QR etiketi yazdırın ve makinenin üstüne yapıştırın.' },
   { t: 'Operatör telefonla okutsun', d: 'Uygulama kurmadan, giriş yapmadan arıza formu açılır. Birkaç dokunuşla bildirim gider.' },
@@ -15,21 +17,36 @@ const faq = [
   title="ArızaQR | QR Kodlu Arıza Takip Programı"
   description="Makineye QR kod yapıştırın, arıza bildirimi telefondan saniyeler içinde gelsin. Küçük imalatçılar için basit arıza ve bakım takip yazılımı."
 >
-  <main>
-    <header>
-      <h1>Makine arızasını QR ile bildirin, takip edin</h1>
-      <p>ArızaQR, küçük imalatçılar için basit bir arıza ve bakım takip programıdır. Kurulum yok, eğitim yok.</p>
-      <a href="/fiyatlar">Ücretsiz dene</a>
+  <main class="mx-auto max-w-5xl px-4 py-16 sm:py-24">
+    <header class="text-center">
+      <p class="text-sm font-medium"><ShinyText client:visible text="Küçük imalatçılar için arıza takip" speed={4} /></p>
+      <h1 class="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">Makine arızasını QR ile bildirin, takip edin</h1>
+      <p class="mx-auto mt-6 max-w-2xl text-lg text-neutral-400">ArızaQR, küçük imalatçılar için basit bir arıza ve bakım takip programıdır. Kurulum yok, eğitim yok.</p>
+      <a href="/fiyatlar" class="mt-8 inline-block rounded-lg bg-white px-6 py-3 font-semibold text-neutral-950 hover:bg-neutral-200">Ücretsiz dene</a>
     </header>
-    <section>
-      <h2>Nasıl çalışır?</h2>
-      <ol>
-        {steps.map((s) => <li><h3>{s.t}</h3><p>{s.d}</p></li>)}
+
+    <section class="mt-24">
+      <h2 class="text-2xl font-semibold sm:text-3xl">Nasıl çalışır?</h2>
+      <ol class="mt-8 grid gap-4 sm:grid-cols-3">
+        {steps.map((s, i) => (
+          <li>
+            <SpotlightCard client:visible class="h-full p-6">
+              <span class="text-sm text-neutral-500">{i + 1}</span>
+              <h3 class="mt-2 text-lg font-semibold">{s.t}</h3>
+              <p class="mt-2 text-neutral-400">{s.d}</p>
+            </SpotlightCard>
+          </li>
+        ))}
       </ol>
     </section>
-    <section>
-      <h2>Sık sorulan sorular</h2>
-      {faq.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+
+    <section class="mt-24">
+      <h2 class="text-2xl font-semibold sm:text-3xl">Sık sorulan sorular</h2>
+      <div class="mt-8 divide-y divide-neutral-800">
+        {faq.map((f) => (
+          <details class="py-4"><summary class="cursor-pointer font-medium">{f.q}</summary><p class="mt-2 text-neutral-400">{f.a}</p></details>
+        ))}
+      </div>
     </section>
   </main>
   <script type="application/ld+json" set:html={JSON.stringify({
