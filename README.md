@@ -1,4 +1,4 @@
-# QR Arıza ve Bakım Takip (mini CMMS)
+# ArızaQR (mini CMMS)
 
 Küçük imalatçılar için QR kodlu makine arıza bildirimi ve bakım takip SaaS'ı.
 
