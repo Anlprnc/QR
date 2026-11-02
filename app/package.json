@@ -7,7 +7,9 @@
     "dev:web": "vite",
     "build": "vite build",
     "deploy": "wrangler deploy",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "wrangler d1 migrations apply qr-ariza --local",
+    "db:seed": "wrangler d1 execute qr-ariza --local --file seeds/dev.sql"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",

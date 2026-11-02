@@ -23,3 +23,10 @@ npx wrangler d1 execute qr-ariza --local --file seeds/dev.sql
 npx wrangler dev --local
 curl localhost:8787/api/q/demo-token-1
 ```
+
+## Veritabanı kısayolları (app)
+```
+npm run db:migrate   # yerel D1'e migrasyonları uygular (yeni migrasyon gelince tekrar çalıştırın)
+npm run db:seed      # demo makineyi ekler
+```
+Giriş kodları yerelde `wrangler dev` terminalinde `giriş kodu ...` olarak yazılır.

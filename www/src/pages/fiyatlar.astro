@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+const appUrl = import.meta.env.PUBLIC_APP_URL ?? 'http://localhost:8787';
+---
+<Base
+  title="ArızaQR Fiyatlar | QR Kodlu Arıza Takip Programı"
+  description="ArızaQR fiyatlandırması. Pilot dönemde küçük imalatçılar ücretsiz deneyebilir."
+>
+  <header class="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
+    <a href="/" class="plaka text-xl">ArızaQR</a>
+    <a href="/fiyatlar" class="font-semibold underline decoration-2 underline-offset-4">Fiyatlar</a>
+  </header>
+  <main class="mx-auto max-w-3xl px-5 py-16">
+    <h1 class="plaka text-4xl sm:text-5xl">Fiyatlar</h1>
+    <p class="mt-6 max-w-xl text-lg text-gri">
+      ArızaQR şu an pilot dönemde. Fiyatlandırma, ilk kullanıcıların nasıl kullandığına bakılarak netleşecek.
+      Bu dönemde ücretsiz deneyebilirsiniz.
+    </p>
+    <a href={`${appUrl}/giris`} class="mt-8 inline-block rounded-sm bg-dokum px-6 py-3 font-semibold text-sac hover:bg-black">Ücretsiz dene</a>
+    <p class="mt-10 text-sm text-gri">Fiyat tablosu, yayına çıkmadan önce burada yayınlanacak.</p>
+  </main>
+</Base>

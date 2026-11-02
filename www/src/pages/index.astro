@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import AndonDemo from '../components/AndonDemo';
 import SpotlightCard from '../components/react-bits/SpotlightCard';
 
+const appUrl = import.meta.env.PUBLIC_APP_URL ?? 'http://localhost:8787';
 const steps = [
   { t: 'Makineye etiketi yapıştırın', d: 'Her makine için bir QR etiketi yazdırırsınız. Etiket makinenin adını ve yerini taşır.' },
   { t: 'Operatör telefonla okutur', d: 'Uygulama indirmek ya da giriş yapmak yok. Form tarayıcıda açılır, sorunu iki cümleyle yazar.' },
@@ -36,7 +37,7 @@ const faq = [
           Makineye bir QR etiketi yapıştırın. Operatör okutup arızayı bildirsin, bakım ekibinin telefonuna anında düşsün.
           Kurulum ve eğitim gerekmez.
         </p>
-        <a href="/fiyatlar" class="mt-8 inline-block rounded-sm bg-dokum px-6 py-3 font-semibold text-sac hover:bg-black">Ücretsiz dene</a>
+        <a href={`${appUrl}/giris`} class="mt-8 inline-block rounded-sm bg-dokum px-6 py-3 font-semibold text-sac hover:bg-black">Ücretsiz dene</a>
       </div>
       <AndonDemo client:visible />
     </section>
