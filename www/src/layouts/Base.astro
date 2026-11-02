@@ -1,0 +1,28 @@
+---
+interface Props { title: string; description: string; path?: string }
+const { title, description, path = Astro.url.pathname } = Astro.props;
+const canonical = new URL(path, Astro.site).toString();
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'ArızaQR',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  description,
+};
+---
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="tr_TR" />
+    <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+  </head>
+  <body><slot /></body>
+</html>

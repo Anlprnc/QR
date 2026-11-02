@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+const steps = [
+  { t: 'Makineye QR yapıştır', d: 'Her makine için bir QR etiketi yazdırın ve makinenin üstüne yapıştırın.' },
+  { t: 'Operatör telefonla okutsun', d: 'Uygulama kurmadan, giriş yapmadan arıza formu açılır. Birkaç dokunuşla bildirim gider.' },
+  { t: 'Bakım ekibi anında haberdar olsun', d: 'Bildirim ve e-posta ile arıza telefona düşer. Durumu açık, işlemde, çözüldü olarak takip edin.' },
+];
+const faq = [
+  { q: 'Operatörün uygulama kurması gerekiyor mu?', a: 'Hayır. QR kodu telefon kamerasıyla okutması yeterli, form tarayıcıda açılır.' },
+  { q: 'Excel ve WhatsApp grubundan farkı ne?', a: 'Arızalar makine bazında kayıt altında kalır, kaybolmaz. Hangi makine ne kadar sık arızalanıyor görebilirsiniz.' },
+  { q: 'Küçük atölyeler için uygun mu?', a: 'Evet. Büyük CMMS yazılımları gibi karmaşık değil, birkaç makineyle de kullanılır.' },
+];
+---
+<Base
+  title="ArızaQR | QR Kodlu Arıza Takip Programı"
+  description="Makineye QR kod yapıştırın, arıza bildirimi telefondan saniyeler içinde gelsin. Küçük imalatçılar için basit arıza ve bakım takip yazılımı."
+>
+  <main>
+    <header>
+      <h1>Makine arızasını QR ile bildirin, takip edin</h1>
+      <p>ArızaQR, küçük imalatçılar için basit bir arıza ve bakım takip programıdır. Kurulum yok, eğitim yok.</p>
+      <a href="/fiyatlar">Ücretsiz dene</a>
+    </header>
+    <section>
+      <h2>Nasıl çalışır?</h2>
+      <ol>
+        {steps.map((s) => <li><h3>{s.t}</h3><p>{s.d}</p></li>)}
+      </ol>
+    </section>
+    <section>
+      <h2>Sık sorulan sorular</h2>
+      {faq.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+    </section>
+  </main>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  })} />
+</Base>

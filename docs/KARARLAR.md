@@ -1,0 +1,10 @@
+# Teknik Kararlar
+- İki Worker: `www` (statik SEO) ve `app` (API + SPA, noindex)
+- D1 + Drizzle ORM; Better Auth (e-posta kodu ile şifresiz giriş)
+- Çok kiracılık: her tabloda `org_id`, her sorguda filtre + izolasyon testleri
+- Bildirim: Web Push + Resend e-posta; fotoğraflar R2 (v1.1)
+- QR sayfası: Cloudflare Turnstile + rate limit
+- Ücretsiz plan sınırları: 100k istek/gün, 10 ms CPU/istek; ilk ödeyen müşteride Workers Paid ($5/ay)
+- SEO: Google odaklı (TR payı ~%77), Yandex ~%22; Search Console + Bing + Yandex, IndexNow, JSON-LD
+- İçerik: haftada en fazla 2 yazı, şablonlanmış şehir/sektör sayfası yok
+- Yayın öncesi her şey Kral'ın onayından geçer
