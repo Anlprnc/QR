@@ -31,6 +31,7 @@ export default function Shell({ children }: { children: ReactNode }) {
           <nav className="flex gap-5">
             <NavLink to="/panel" className={link}>Panel</NavLink>
             <NavLink to="/makineler" className={link}>Makineler</NavLink>
+            <NavLink to="/raporlar" className={link}>Raporlar</NavLink>
           </nav>
           <p className="ml-auto text-sm text-gri">{me.org} · {me.email}</p>
           <button onClick={logout} className="btn-ghost text-sm">Çıkış yap</button>

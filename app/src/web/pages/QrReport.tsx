@@ -9,6 +9,7 @@ export default function QrReport() {
   const [machine, setMachine] = useState('');
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
+  const [stopped, setStopped] = useState<boolean | null>(null);
 
   useEffect(() => {
     fetch(`/api/q/${token}`)
@@ -27,7 +28,7 @@ export default function QrReport() {
       const r = await fetch(`/api/q/${token}/tickets`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ description, reporterName: name || undefined }),
+        body: JSON.stringify({ description, reporterName: name || undefined, machineStopped: stopped === true }),
       });
       setState(r.ok ? 'done' : 'error');
     } catch {
@@ -78,12 +79,24 @@ export default function QrReport() {
           <textarea required minLength={3} maxLength={1000} rows={4} value={description}
             onChange={(e) => setDescription(e.target.value)} className="alan mt-1" />
         </label>
+        <fieldset>
+          <legend className="font-semibold">Makine durdu mu?</legend>
+          <div className="mt-1 grid grid-cols-2 gap-2">
+            {([[true, 'Evet, durdu'], [false, 'Hayır, çalışıyor']] as const).map(([v, label]) => (
+              <button key={String(v)} type="button" onClick={() => setStopped(v)} aria-pressed={stopped === v}
+                className={`border-2 border-dokum px-3 py-3 font-semibold ${stopped === v ? (v ? 'bg-kirmizi text-white' : 'bg-dokum text-sac') : 'bg-sac'}`}>
+                {label}
+              </button>
+            ))}
+          </div>
+        </fieldset>
         <label className="block">
           <span className="font-semibold">Adınız (isteğe bağlı)</span>
           <input maxLength={80} value={name} onChange={(e) => setName(e.target.value)} className="alan mt-1" />
         </label>
+        {stopped === null && <p className="text-sm text-gri">Makinenin durup durmadığını seçin.</p>}
         {state === 'error' && <p role="alert" className="font-medium text-kirmizi">Gönderilemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.</p>}
-        <button disabled={state === 'sending'} className="btn w-full">
+        <button disabled={state === 'sending' || stopped === null} className="btn w-full">
           {state === 'sending' ? 'Gönderiliyor…' : 'Arızayı bildir'}
         </button>
       </form>

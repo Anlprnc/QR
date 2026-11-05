@@ -22,3 +22,13 @@ export function timeAgo(ms: number): string {
   if (h < 24) return `${h} sa önce`;
   return `${Math.round(h / 24)} gün önce`;
 }
+
+export function formatDuration(ms: number | null | undefined): string {
+  if (ms == null) return '–';
+  const m = Math.round(ms / 60000);
+  if (m < 1) return '1 dakikadan az';
+  if (m < 60) return `${m} dk`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return m % 60 ? `${h} sa ${m % 60} dk` : `${h} sa`;
+  return `${Math.round(h / 24)} gün`;
+}

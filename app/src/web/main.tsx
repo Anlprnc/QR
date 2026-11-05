@@ -6,6 +6,7 @@ import QrReport from './pages/QrReport';
 import Login from './pages/Login';
 import Panel from './pages/Panel';
 import Machines from './pages/Machines';
+import Reports from './pages/Reports';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/giris" element={<Login />} />
         <Route path="/panel" element={<Panel />} />
         <Route path="/makineler" element={<Machines />} />
+        <Route path="/raporlar" element={<Reports />} />
         <Route path="*" element={<Navigate to="/panel" replace />} />
       </Routes>
     </BrowserRouter>
