@@ -65,7 +65,7 @@ export default function AndonDemo() {
       </div>
 
       {/* Makine plakası */}
-      <div className="rounded-sm border-2 border-dokum bg-sac p-5">
+      <div className="levha rounded-sm border-2 border-dokum bg-sac p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="seri text-sm text-gri">Seri no 0417</p>

@@ -34,3 +34,27 @@ body { font-family: var(--font-sans); font-stretch: 100%; line-height: 1.55; }
 .yazi table { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: .95rem; }
 .yazi th, .yazi td { border: 2px solid var(--color-dokum); padding: .55rem .7rem; text-align: left; vertical-align: top; }
 .yazi th { background: var(--color-sac); }
+
+/* Atölye zemini: mühendislik çizimi ızgarası */
+.zemin {
+  background-color: var(--color-dokum);
+  background-image:
+    linear-gradient(rgba(244,244,241,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244,244,241,.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.lamba-mini { display: inline-block; width: .85rem; height: .85rem; border-radius: 9999px; flex: none; }
+.makine { transition: border-color .2s ease, background-color .2s ease; }
+.nabiz { animation: nabiz 1.4s ease-in-out infinite; }
+@keyframes nabiz { 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .nabiz { animation: none; } }
+
+/* Perçinli levha: köşelerde dört perçin */
+.levha {
+  position: relative;
+  background-image:
+    radial-gradient(circle at 9px 9px, rgba(27,32,36,.45) 2px, transparent 2.5px),
+    radial-gradient(circle at calc(100% - 9px) 9px, rgba(27,32,36,.45) 2px, transparent 2.5px),
+    radial-gradient(circle at 9px calc(100% - 9px), rgba(27,32,36,.45) 2px, transparent 2.5px),
+    radial-gradient(circle at calc(100% - 9px) calc(100% - 9px), rgba(27,32,36,.45) 2px, transparent 2.5px);
+}

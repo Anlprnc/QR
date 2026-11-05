@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import AndonDemo from '../components/AndonDemo';
+import FloorDemo from '../components/FloorDemo';
 import SpotlightCard from '../components/react-bits/SpotlightCard';
 
 const appUrl = import.meta.env.PUBLIC_APP_URL ?? 'http://localhost:8787';
@@ -41,7 +42,15 @@ const faq = [
       <AndonDemo client:visible />
     </section>
 
-    <section class="border-y-2 border-dokum bg-sac">
+    <section class="bg-dokum">
+      <div class="mx-auto max-w-6xl px-5 py-16">
+        <h2 class="plaka max-w-2xl text-3xl text-sac sm:text-4xl">Atölyenizi tek bakışta görün</h2>
+        <p class="mt-3 max-w-xl text-sac/70">Hangi makine çalışıyor, hangisi bekliyor, hangisine müdahale ediliyor. Deneyin: bir makineye dokunup arıza bildirin, sonra bakım panosundan üstlenin.</p>
+        <div class="mt-8"><FloorDemo client:visible /></div>
+      </div>
+    </section>
+
+    <section class="border-b-2 border-dokum bg-sac">
       <div class="mx-auto max-w-6xl px-5 py-16">
         <h2 class="plaka text-3xl sm:text-4xl">Üç adımda çalışır</h2>
         <ol class="mt-10 divide-y divide-dokum/25">
