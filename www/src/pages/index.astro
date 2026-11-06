@@ -10,16 +10,25 @@ const appUrl = import.meta.env.PUBLIC_APP_URL ?? 'http://localhost:8787';
 const steps = [
   { t: 'Makineye etiketi yapıştırın', d: 'Her makine için bir QR etiketi yazdırırsınız. Etiket makinenin adını ve yerini taşır.' },
   { t: 'Operatör telefonla okutur', d: 'Uygulama indirmek ya da giriş yapmak yok. Form tarayıcıda açılır, sorunu iki cümleyle yazar.' },
-  { t: 'Bakım ekibi haberdar olur', d: 'Arıza telefona bildirim ve e-posta olarak düşer. Birisi üstlenir, iş bitince kapatır.' },
+  { t: 'Bakım ekibi haberdar olur', d: 'Arıza anında panoya düşer ve ekibe e-posta gider. Birisi üstlenir, iş bitince ne yaptığını yazıp kapatır.' },
 ];
 const states = [
   { c: 'bg-kirmizi', t: 'Arızalı', d: 'Bildirim geldi, henüz kimse bakmadı. Bekleyen işler en üstte durur.' },
   { c: 'bg-amber', t: 'Müdahale ediliyor', d: 'Bir teknisyen işi üstlendi. Kimin baktığı ve ne zamandır baktığı görünür.' },
   { c: 'bg-yesil', t: 'Çalışıyor', d: 'Arıza kapandı. Çözülme süresi kayıtta kalır, hangi makine sık bozuluyor görürsünüz.' },
 ];
+const features = [
+  { t: 'Makine durdu mu?', d: 'Operatör makinenin durup durmadığını işaretler. Duran makineler kırmızı şeritle en üstte görünür.' },
+  { t: 'Üstlenme ve çözüm notu', d: 'Kim baktığı, ne yaptığı ve ne kadar sürdüğü kayıtta kalır. Aynı arıza tekrar ederse geçmişe bakarsınız.' },
+  { t: 'Planlı bakım', d: '“Yağ kontrolü, 30 günde bir” gibi görevler tanımlayın. Vadesi gelen ve geciken bakımlar menüde görünür.' },
+  { t: 'TV modu', d: 'Atölye duvarındaki ekranda tüm makinelerin durumu büyük lambalarla, kendiliğinden yenilenerek görünür.' },
+  { t: 'Raporlar', d: 'Hangi makine sık bozuluyor, toplam ne kadar durdu, çözüm süresi kısalıyor mu? Excel’e de aktarılır.' },
+  { t: 'Ekip ve e-posta', d: 'Ekip arkadaşlarınızı ekleyin; yeni arızada herkese e-posta gider. Şifre yok, kodla giriş.' },
+];
 const faq = [
   { q: 'Operatörün uygulama kurması gerekiyor mu?', a: 'Hayır. QR kodu telefon kamerasıyla okutması yeterli, form tarayıcıda açılır.' },
   { q: 'Excel ve WhatsApp grubundan farkı ne?', a: 'Arızalar makine bazında kayıt altında kalır, mesaj akışında kaybolmaz. Hangi makine ne sıklıkla arızalanıyor görebilirsiniz.' },
+  { q: 'Planlı bakımı da takip edebilir miyim?', a: 'Evet. Makine başına periyodik bakım görevleri tanımlarsınız; vadesi gelince ve geciken bakımlar panelde görünür, yapıldığında tek tıkla işaretlenir.' },
   { q: 'Küçük atölyeler için uygun mu?', a: 'Evet. Büyük bakım yazılımları gibi karmaşık değil, birkaç makineyle de kullanılır.' },
 ];
 ---
@@ -34,7 +43,7 @@ const faq = [
       <div>
         <h1 class="plaka text-4xl sm:text-6xl">Makine bozulunca herkes aynı anda öğrensin.</h1>
         <p class="mt-6 max-w-xl text-lg text-gri">
-          Makineye bir QR etiketi yapıştırın. Operatör okutup arızayı bildirsin, bakım ekibinin telefonuna anında düşsün.
+          Makineye bir QR etiketi yapıştırın. Operatör okutup arızayı bildirsin, bakım ekibinin panosuna ve e-postasına anında düşsün.
           Kurulum ve eğitim gerekmez.
         </p>
         <a href={`${appUrl}/giris`} class="mt-8 inline-block rounded-sm bg-dokum px-6 py-3 font-semibold text-sac hover:bg-black">Ücretsiz dene</a>
@@ -79,6 +88,20 @@ const faq = [
           </li>
         ))}
       </ul>
+    </section>
+
+    <section class="mx-auto max-w-6xl px-5 pb-20">
+      <h2 class="plaka text-3xl sm:text-4xl">Bildirimden fazlası</h2>
+      <p class="mt-4 max-w-xl text-gri">Arıza panosunun yanında küçük bir atölyenin ihtiyaç duyduğu bakım araçları.</p>
+      <ul class="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {features.map((f) => (
+          <li class="levha border-2 border-dokum bg-sac p-6">
+            <h3 class="text-lg font-bold">{f.t}</h3>
+            <p class="mt-2 text-gri">{f.d}</p>
+          </li>
+        ))}
+      </ul>
+      <p class="mt-6 text-sm"><a class="underline underline-offset-4" href="/periyodik-bakim-takibi">Periyodik bakım nasıl takip edilir?</a></p>
     </section>
 
     <section class="mx-auto max-w-3xl px-5 pb-24">

@@ -1,0 +1,46 @@
+---
+import Page from '../layouts/Page.astro';
+const faq = [
+  { q: 'Önleyici bakım ile arıza sonrası bakım arasındaki fark nedir?', a: 'Önleyici (periyodik) bakım, makine bozulmadan belirli aralıklarla yapılan kontrol ve değişimlerdir. Arıza sonrası bakım ise bozulduktan sonra yapılan onarımdır. Küçük atölyelerde ikisinin dengesi kurulduğunda plansız duruşlar azalır.' },
+  { q: 'Bakım aralığını nasıl belirlerim?', a: 'Makine üreticisinin kullanım kılavuzu başlangıç noktasıdır. Sonra kendi arıza kayıtlarınıza bakın: bir parça sık bozuluyorsa o kontrolün aralığını kısaltın.' },
+  { q: 'Kaç makineyle başlamalıyım?', a: 'En çok durduran ya da en pahalı birkaç makineyle başlayın. Her birine üç beş basit görev yeterlidir; sistem oturunca diğer makineleri ekleyin.' },
+];
+---
+<Page
+  title="Periyodik Bakım Takibi Nasıl Yapılır? | ArızaQR"
+  description="Küçük atölyelerde periyodik bakımı kâğıt ve Excel olmadan takip etmek: görevleri nasıl belirlersiniz, aralıkları nasıl ayarlarsınız, geciken bakımı nasıl görürsünüz."
+  h1="Periyodik bakım nasıl takip edilir?"
+  path="/periyodik-bakim-takibi"
+  faq={faq}
+>
+  <p>
+    Periyodik bakım, makine bozulmadan belirli aralıklarla yapılan yağlama, filtre değişimi, kalibrasyon ve benzeri kontrollerdir.
+    Küçük atölyelerde bu işler çoğu zaman “biri hatırlar” varsayımına dayanır; bir gün kimse hatırlamaz ve makine en yoğun haftada durur.
+  </p>
+
+  <h2>Basit bir bakım planı</h2>
+  <ol>
+    <li><strong>Makineleri sıralayın.</strong> Durduğunda en çok kaybettiren makinelerle başlayın.</li>
+    <li><strong>Görevleri yazın.</strong> Üreticinin kılavuzundan ve ustanın tecrübesinden “Yağ seviyesi kontrolü”, “Hava filtresi temizliği” gibi kısa görevler çıkarın.</li>
+    <li><strong>Aralık verin.</strong> Her gün, haftalık, aylık, üç aylık ya da yıllık. Her görev için tek bir aralık yeterlidir.</li>
+    <li><strong>Sorumlu belirleyin.</strong> Görevi kimin yapacağı belli değilse kimse yapmaz.</li>
+    <li><strong>Yapılınca işaretleyin.</strong> Bir sonraki vade, yapıldığı tarihten itibaren yeniden hesaplanır.</li>
+  </ol>
+
+  <h2>Kâğıt ve Excel neden yetmez?</h2>
+  <ul>
+    <li>Vadesi gelen işi kimse size hatırlatmaz; listeyi açıp bakmak gerekir.</li>
+    <li>Geciken bakımlar tablonun içinde kaybolur.</li>
+    <li>Bakım kaydı ile arıza kaydı ayrı yerlerde durur, ikisini birlikte okumak zorlaşır.</li>
+  </ul>
+
+  <h2>Arıza kayıtlarıyla birlikte okuyun</h2>
+  <p>
+    Bir makine sık arızalanıyorsa bakım aralığı çok uzun olabilir. Arıza kayıtlarınızda hangi makinenin ne kadar durduğuna bakın,
+    sonra o makinenin bakım görevlerini sıklaştırın. <a href="/ariza-takip-programi">Arıza takip programı rehberi</a> kayıt tutmanın temelini anlatır;
+    operatörlerden arıza toplamak için <a href="/qr-kodlu-ariza-bildirimi">QR kodlu bildirim</a> işinizi kolaylaştırır.
+  </p>
+
+  <h2>Can güvenliği uyarısı</h2>
+  <p>Periyodik bakım görevleri iş güvenliği prosedürlerinin yerine geçmez. Enerji kesme, kilitleme ve yetkili personel kuralları ayrıca uygulanmalıdır.</p>
+</Page>
