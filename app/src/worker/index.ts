@@ -30,12 +30,13 @@ const reportSchema = z.object({
 app.post('/api/q/:token/tickets', zValidator('json', reportSchema), async (c) => {
   const token = c.req.param('token');
   const ip = c.req.header('cf-connecting-ip') ?? 'local';
-  const ok = (await allow(c.env.DB, `qip:${ip}`, 15, 10 * 60_000)) && (await allow(c.env.DB, `qtk:${token}`, 40, 3600_000));
-  if (!ok) return c.json({ error: 'too_many_requests' }, 429);
+  if (!(await allow(c.env.DB, `qip:${ip}`, 15, 10 * 60_000))) return c.json({ error: 'too_many_requests' }, 429);
 
   const m = await c.env.DB.prepare('SELECT id, org_id, name FROM machines WHERE qr_token = ? AND archived_at IS NULL')
     .bind(token).first<{ id: string; org_id: string; name: string }>();
   if (!m) return c.json({ error: 'not_found' }, 404);
+  if (!(await allow(c.env.DB, `qtk:${token}`, 40, 3600_000))) return c.json({ error: 'too_many_requests' }, 429);
+  if (Math.random() < 0.02) c.executionCtx.waitUntil(c.env.DB.prepare('DELETE FROM rate_limits WHERE window_start < ?').bind(Date.now() - 86_400_000).run().then(() => {}));
   const { description, reporterName, machineStopped } = c.req.valid('json');
   const id = crypto.randomUUID();
   const now = Date.now();

@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+---
+<Base title="Sayfa bulunamadı | ArızaQR" description="Aradığınız sayfa bulunamadı.">
+  <SiteHeader />
+  <main class="mx-auto max-w-3xl px-5 py-20">
+    <h1 class="plaka text-4xl">Sayfa bulunamadı</h1>
+    <p class="mt-4 text-gri">Adres yanlış yazılmış ya da sayfa taşınmış olabilir.</p>
+    <a href="/" class="mt-6 inline-block rounded-sm bg-dokum px-6 py-3 font-semibold text-sac hover:bg-black">Ana sayfaya dön</a>
+  </main>
+  <SiteFooter />
+</Base>

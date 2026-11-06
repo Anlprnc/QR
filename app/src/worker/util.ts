@@ -25,4 +25,8 @@ export async function allow(db: D1Database, key: string, limit: number, windowMs
   return (row?.hits ?? 1) <= limit;
 }
 
-export const csvCell = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+// Excel'de =, +, -, @ ile başlayan hücre formül sayılır; başına ' koyarak metne çeviriyoruz
+export const csvCell = (v: unknown) => {
+  const t = String(v ?? '');
+  return `"${(/^[=+\-@\t\r]/.test(t) ? `'${t}` : t).replace(/"/g, '""')}"`;
+};

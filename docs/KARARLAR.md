@@ -1,6 +1,8 @@
 # Teknik Kararlar
 - İki Worker: `www` (statik SEO) ve `app` (API + SPA, noindex)
-- D1 + Drizzle ORM; Better Auth (e-posta kodu ile şifresiz giriş)
+- D1; şifresiz giriş kendi yazdığımız e-posta kodu akışıyla (`app/src/worker/auth.ts`). Better Auth kullanılmadı.
+- Drizzle şeması (`db/schema.ts`) migrasyonlarla senkron tutulur; sorgular şimdilik ham D1.
+- Makineler silinmez, arşivlenir (geçmiş ve raporlar korunur)
 - Çok kiracılık: her tabloda `org_id`, her sorguda filtre + izolasyon testleri
 - Bildirim: Web Push + Resend e-posta; fotoğraflar R2 (v1.1)
 - QR sayfası: Cloudflare Turnstile + rate limit

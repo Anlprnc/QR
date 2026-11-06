@@ -69,7 +69,11 @@ auth.post('/verify', zValidator('json', z.object({ email: emailSchema, code: z.s
     await c.env.DB.prepare('UPDATE login_codes SET attempts = attempts + 1 WHERE email = ?').bind(email).run();
     return c.json({ error: 'invalid_code' }, 400);
   }
-  await c.env.DB.prepare('DELETE FROM login_codes WHERE email = ?').bind(email).run();
+  await c.env.DB.batch([
+    c.env.DB.prepare('DELETE FROM login_codes WHERE email = ?').bind(email),
+    c.env.DB.prepare('DELETE FROM sessions WHERE expires_at < ?').bind(now),
+    c.env.DB.prepare('DELETE FROM login_codes WHERE expires_at < ? AND window_start < ?').bind(now, now - 3600_000),
+  ]);
 
   let user = await c.env.DB.prepare('SELECT id, org_id FROM users WHERE email = ?')
     .bind(email).first<{ id: string; org_id: string }>();

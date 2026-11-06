@@ -4,7 +4,7 @@ import { api, ApiError, clock } from '../lib/api';
 
 type Member = { id: string; email: string; createdAt: number; you: boolean };
 
-export default function Settings() {
+function SettingsBody() {
   const me = useMe();
   const [org, setOrg] = useState('');
   const [ad, setAd] = useState(() => localStorage.getItem('ad') ?? '');
@@ -46,7 +46,7 @@ export default function Settings() {
   }
 
   return (
-    <Shell>
+    <>
       <h1 className="plaka text-3xl">Ayarlar</h1>
       <p role="status" className="mt-2 h-6 font-semibold text-yesil">{msg}</p>
 
@@ -88,6 +88,11 @@ export default function Settings() {
           </form>
         </section>
       </div>
-    </Shell>
+    </>
   );
+}
+
+// useMe, Shell'in sağladığı bağlamı okur; bu yüzden gövde Shell'in içinde render edilir
+export default function Settings() {
+  return <Shell><SettingsBody /></Shell>;
 }
