@@ -12,3 +12,17 @@ export function sixDigitCode(): string {
   const n = crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000;
   return n.toString().padStart(6, '0');
 }
+
+// Pencere başına en fazla `limit` istek. Sınır aşıldıysa false döner.
+export async function allow(db: D1Database, key: string, limit: number, windowMs: number): Promise<boolean> {
+  const row = await db.prepare(
+    `INSERT INTO rate_limits (key, window_start, hits) VALUES (?1, ?2, 1)
+     ON CONFLICT(key) DO UPDATE SET
+       hits = CASE WHEN ?2 - window_start > ?3 THEN 1 ELSE hits + 1 END,
+       window_start = CASE WHEN ?2 - window_start > ?3 THEN ?2 ELSE window_start END
+     RETURNING hits`,
+  ).bind(key, Date.now(), windowMs).first<{ hits: number }>();
+  return (row?.hits ?? 1) <= limit;
+}
+
+export const csvCell = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;

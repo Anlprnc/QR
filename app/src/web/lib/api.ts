@@ -32,3 +32,20 @@ export function formatDuration(ms: number | null | undefined): string {
   if (h < 24) return m % 60 ? `${h} sa ${m % 60} dk` : `${h} sa`;
   return `${Math.round(h / 24)} gün`;
 }
+
+// Bakım vadesi için kısa metin ve renk sınıfı
+export function dueInfo(dueAt: number): { text: string; tone: 'late' | 'soon' | 'ok' } {
+  const d = Math.round((dueAt - Date.now()) / 86_400_000);
+  if (d < 0) return { text: `${-d} gün gecikti`, tone: 'late' };
+  if (d === 0) return { text: 'Bugün', tone: 'soon' };
+  return { text: `${d} gün sonra`, tone: d <= 7 ? 'soon' : 'ok' };
+}
+
+export const clock = (ms: number) =>
+  new Date(ms).toLocaleString('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+
+export type MachineState = 'ok' | 'fault' | 'stopped';
+export type MachineSummary = {
+  id: string; name: string; location: string | null; qrToken: string; state: MachineState;
+  openCount: number; unclaimed: number; stoppedCount: number; lastTicketAt: number | null;
+};

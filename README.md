@@ -30,3 +30,9 @@ npm run db:migrate   # yerel D1'e migrasyonları uygular (yeni migrasyon gelince
 npm run db:seed      # demo makineyi ekler
 ```
 Giriş kodları yerelde `wrangler dev` terminalinde `giriş kodu ...` olarak yazılır.
+
+## Uygulama özellikleri (app)
+Arıza panosu (atama, çözüm notu, geçmiş notları, arama, sesli uyarı), makine kartları ve QR etiketleri,
+makine detay sayfası, planlı bakım, raporlar (trend, duruş süresi, CSV), ekip yönetimi, TV modu (`/tv`),
+yeni arızada e-posta bildirimi (Resend), QR formunda rate limit.
+Yeni migrasyon (`0004_cmms.sql`) için `npm run db:migrate` çalıştırın.

@@ -1,12 +1,15 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-type State = 'loading' | 'ready' | 'notfound' | 'sending' | 'done' | 'error';
+type State = 'loading' | 'ready' | 'notfound' | 'sending' | 'done' | 'error' | 'limited';
+
+const QUICK = ['Çalışmıyor', 'Ses yapıyor', 'Yağ kaçırıyor', 'Isınıyor', 'Hata kodu veriyor', 'Ürün kalitesi bozuk'];
 
 export default function QrReport() {
   const { token } = useParams();
   const [state, setState] = useState<State>('loading');
   const [machine, setMachine] = useState('');
+  const [openCount, setOpenCount] = useState(0);
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [stopped, setStopped] = useState<boolean | null>(null);
@@ -15,7 +18,9 @@ export default function QrReport() {
     fetch(`/api/q/${token}`)
       .then(async (r) => {
         if (!r.ok) return setState('notfound');
-        setMachine(((await r.json()) as { machine: string }).machine);
+        const j = (await r.json()) as { machine: string; openCount: number };
+        setMachine(j.machine);
+        setOpenCount(j.openCount);
         setState('ready');
       })
       .catch(() => setState('error'));
@@ -30,7 +35,7 @@ export default function QrReport() {
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ description, reporterName: name || undefined, machineStopped: stopped === true }),
       });
-      setState(r.ok ? 'done' : 'error');
+      setState(r.ok ? 'done' : r.status === 429 ? 'limited' : 'error');
     } catch {
       setState('error');
     }
@@ -60,6 +65,8 @@ export default function QrReport() {
         <div>
           <h1 className="plaka text-2xl">Bildirim alındı</h1>
           <p className="mt-2 text-gri">{machine} için arıza kaydı bakım ekibine iletildi.</p>
+          <button onClick={() => { setDescription(''); setStopped(null); setState('ready'); setOpenCount((n) => n + 1); }}
+            className="mt-4 text-sm underline underline-offset-4">Başka bir arıza bildir</button>
         </div>
       </main>
     );
@@ -74,10 +81,21 @@ export default function QrReport() {
         </div>
       </div>
       <form onSubmit={submit} className="mt-6 space-y-4 border-2 border-dokum bg-sac p-5">
+        {openCount > 0 && (
+          <p role="status" className="border-l-4 border-amber bg-boya px-3 py-2 text-sm">
+            Bu makine için zaten <b>{openCount} açık arıza</b> var. Aynı sorunsa tekrar bildirmenize gerek yok; farklıysa devam edin.
+          </p>
+        )}
         <label className="block">
           <span className="font-semibold">Sorun nedir?</span>
           <textarea required minLength={3} maxLength={1000} rows={4} value={description}
             onChange={(e) => setDescription(e.target.value)} className="alan mt-1" />
+          <span className="mt-2 flex flex-wrap gap-2">
+            {QUICK.map((q) => (
+              <button key={q} type="button" onClick={() => setDescription((d) => (d ? `${d.replace(/[.\s]+$/, '')}. ${q}` : q))}
+                className="border-2 border-dokum bg-boya px-2 py-1 text-sm font-semibold hover:bg-dokum hover:text-sac">{q}</button>
+            ))}
+          </span>
         </label>
         <fieldset>
           <legend className="font-semibold">Makine durdu mu?</legend>
@@ -95,6 +113,7 @@ export default function QrReport() {
           <input maxLength={80} value={name} onChange={(e) => setName(e.target.value)} className="alan mt-1" />
         </label>
         {stopped === null && <p className="text-sm text-gri">Makinenin durup durmadığını seçin.</p>}
+        {state === 'limited' && <p role="alert" className="font-medium text-kirmizi">Kısa sürede çok fazla bildirim gönderildi. Biraz bekleyip tekrar deneyin.</p>}
         {state === 'error' && <p role="alert" className="font-medium text-kirmizi">Gönderilemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.</p>}
         <button disabled={state === 'sending' || stopped === null} className="btn w-full">
           {state === 'sending' ? 'Gönderiliyor…' : 'Arızayı bildir'}

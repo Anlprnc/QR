@@ -3,6 +3,7 @@ import { getCookie, setCookie, deleteCookie } from 'hono/cookie';
 import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import { randomToken, sha256, sixDigitCode } from './util';
+import { sendMail } from './mail';
 
 export type Env = { DB: D1Database; RESEND_API_KEY?: string; MAIL_FROM?: string; AUTH_PEPPER?: string };
 export type Session = { userId: string; orgId: string };
@@ -17,20 +18,9 @@ const COOKIE = 'sid';
 const pepper = (env: Env) => env.AUTH_PEPPER ?? 'dev-only-pepper';
 
 async function sendCode(env: Env, email: string, code: string) {
-  if (!env.RESEND_API_KEY) {
-    console.log(`[dev] giriş kodu ${email}: ${code}`);
-    return;
-  }
-  await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json' },
-    body: JSON.stringify({
-      from: env.MAIL_FROM ?? 'ArızaQR <giris@example.com>',
-      to: email,
-      subject: 'ArızaQR giriş kodunuz',
-      text: `Giriş kodunuz: ${code}\nKod 10 dakika geçerlidir. Siz istemediyseniz bu e-postayı yok sayın.`,
-    }),
-  });
+  if (!env.RESEND_API_KEY) console.log(`[dev] giriş kodu ${email}: ${code}`);
+  await sendMail(env, email, 'ArızaQR giriş kodunuz',
+    `Giriş kodunuz: ${code}\nKod 10 dakika geçerlidir. Siz istemediyseniz bu e-postayı yok sayın.`);
 }
 
 export const requireSession: MiddlewareHandler<AppEnv> = async (c, next) => {

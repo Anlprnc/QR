@@ -30,3 +30,30 @@ body { font-family: var(--font-sans); line-height: 1.5; }
   .yazdir { position: absolute; inset: 0; }
   .etiket { break-inside: avoid; }
 }
+
+/* ---- Atölye görünümü ---- */
+html { background-image: radial-gradient(rgba(27,32,36,.07) 1px, transparent 1px); background-size: 14px 14px; }
+.kart { position: relative; border: 2px solid var(--color-dokum); background: var(--color-sac); box-shadow: 4px 4px 0 rgba(27,32,36,.85); }
+.kart-durdu { border-color: var(--color-kirmizi); box-shadow: 4px 4px 0 var(--color-kirmizi); }
+.kart-durdu::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 6px;
+  background: repeating-linear-gradient(-45deg, var(--color-kirmizi) 0 8px, var(--color-dokum) 8px 16px);
+}
+.kart-durdu > * { position: relative; }
+.btn-tehlike { border: 2px solid var(--color-kirmizi); color: var(--color-kirmizi); border-radius: 2px; padding: .45rem .8rem; font-weight: 600; }
+.btn-tehlike:hover { background: var(--color-kirmizi); color: #fff; }
+.nav-link { border-radius: 2px; padding: .35rem .75rem; font-weight: 600; color: rgba(244,244,241,.7); }
+.nav-link:hover { color: var(--color-sac); background: rgba(244,244,241,.12); }
+.nav-link-aktif { color: var(--color-dokum) !important; background: var(--color-sac); }
+header :focus-visible { outline-color: var(--color-sac); }
+.etiket-rozet { display: inline-block; background: var(--color-dokum); color: var(--color-sac); padding: .1rem .5rem; font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+
+@keyframes nabiz { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+.lamba-nabiz { animation: nabiz 1.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .lamba-nabiz { animation: none; } }
+
+/* TV modu */
+.tv { background: #0f1317; color: #e9ebe6; min-height: 100vh; }
+.tv .tv-kart { border: 2px solid #3a424a; background: #171c21; }
+.tv .tv-durdu { border-color: var(--color-kirmizi); background: #2a1210; }
+.tv .tv-ariza { border-color: var(--color-amber); background: #2a2108; }
