@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "deploy": "node scripts/check-deploy.mjs && astro build && wrangler deploy"
   },
   "dependencies": {
     "@astrojs/react": "^7.1.2",
@@ -26,5 +27,6 @@
     "esbuild@0.25.12": true,
     "fsevents@2.3.3": true,
     "sharp@0.34.5": true
-  }
+  },
+  "devDependencies": {}
 }

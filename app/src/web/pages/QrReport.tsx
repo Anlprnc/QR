@@ -1,15 +1,40 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 type State = 'loading' | 'ready' | 'notfound' | 'sending' | 'done' | 'error' | 'limited';
 
 const QUICK = ['Çalışmıyor', 'Ses yapıyor', 'Yağ kaçırıyor', 'Isınıyor', 'Hata kodu veriyor', 'Ürün kalitesi bozuk'];
 
+declare global { interface Window { turnstile?: { render: (el: HTMLElement, o: Record<string, unknown>) => string; reset: (id?: string) => void } } }
+
+// Cloudflare Turnstile: anahtar tanımlıysa görünmez/hafif doğrulama kutusu çıkar
+function useTurnstile(siteKey: string | null) {
+  const box = useRef<HTMLDivElement>(null);
+  const widget = useRef<string | undefined>(undefined);
+  const [token, setToken] = useState<string>();
+  useEffect(() => {
+    if (!siteKey) return;
+    const draw = () => {
+      if (box.current && window.turnstile && !widget.current)
+        widget.current = window.turnstile.render(box.current, { sitekey: siteKey, callback: setToken, 'expired-callback': () => setToken(undefined) });
+    };
+    if (window.turnstile) return draw();
+    const s = document.createElement('script');
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    s.async = true; s.onload = draw;
+    document.head.appendChild(s);
+  }, [siteKey]);
+  const reset = () => { setToken(undefined); if (widget.current) window.turnstile?.reset(widget.current); };
+  return { box, token, reset, required: !!siteKey };
+}
+
 export default function QrReport() {
   const { token } = useParams();
   const [state, setState] = useState<State>('loading');
   const [machine, setMachine] = useState('');
   const [openCount, setOpenCount] = useState(0);
+  const [siteKey, setSiteKey] = useState<string | null>(null);
+  const ts = useTurnstile(siteKey);
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [stopped, setStopped] = useState<boolean | null>(null);
@@ -18,7 +43,8 @@ export default function QrReport() {
     fetch(`/api/q/${token}`)
       .then(async (r) => {
         if (!r.ok) return setState('notfound');
-        const j = (await r.json()) as { machine: string; openCount: number };
+        const j = (await r.json()) as { machine: string; openCount: number; turnstileSiteKey: string | null };
+        setSiteKey(j.turnstileSiteKey);
         setMachine(j.machine);
         setOpenCount(j.openCount);
         setState('ready');
@@ -33,9 +59,10 @@ export default function QrReport() {
       const r = await fetch(`/api/q/${token}/tickets`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ description, reporterName: name || undefined, machineStopped: stopped === true }),
+        body: JSON.stringify({ description, reporterName: name || undefined, machineStopped: stopped === true, turnstileToken: ts.token }),
       });
       setState(r.ok ? 'done' : r.status === 429 ? 'limited' : 'error');
+      if (!r.ok) ts.reset();
     } catch {
       setState('error');
     }
@@ -115,7 +142,8 @@ export default function QrReport() {
         {stopped === null && <p className="text-sm text-gri">Makinenin durup durmadığını seçin.</p>}
         {state === 'limited' && <p role="alert" className="font-medium text-kirmizi">Kısa sürede çok fazla bildirim gönderildi. Biraz bekleyip tekrar deneyin.</p>}
         {state === 'error' && <p role="alert" className="font-medium text-kirmizi">Gönderilemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.</p>}
-        <button disabled={state === 'sending' || stopped === null} className="btn w-full">
+        {ts.required && <div ref={ts.box} />}
+        <button disabled={state === 'sending' || stopped === null || (ts.required && !ts.token)} className="btn w-full">
           {state === 'sending' ? 'Gönderiliyor…' : 'Arızayı bildir'}
         </button>
       </form>

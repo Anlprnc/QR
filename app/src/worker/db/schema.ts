@@ -54,6 +54,7 @@ export const users = sqliteTable('users', {
   id: text('id').primaryKey(),
   email: text('email').notNull().unique(),
   orgId: text('org_id').notNull(),
+  role: text('role').notNull().default('member'),
   createdAt: integer('created_at').notNull(),
 });
 

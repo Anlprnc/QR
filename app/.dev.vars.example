@@ -1,0 +1,7 @@
+# Yerel geliştirme için kopyalayıp `.dev.vars` yapın (git'e girmez). Canlıda `wrangler secret put` kullanın.
+AUTH_PEPPER=uzun-rastgele-bir-metin
+# RESEND_API_KEY=re_...            # tanımlı değilse e-postalar yalnızca konsola yazılır
+# MAIL_FROM=ArızaQR <giris@alanadiniz.com>
+# Turnstile test anahtarları (her zaman geçer): https://developers.cloudflare.com/turnstile/troubleshooting/testing/
+# TURNSTILE_SITE_KEY=1x00000000000000000000AA
+# TURNSTILE_SECRET=1x0000000000000000000000000000000AA

@@ -2,8 +2,8 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { api, ApiError } from '../lib/api';
 
-type Me = { email: string; org: string };
-const MeContext = createContext<Me & { reload: () => void }>({ email: '', org: '', reload: () => {} });
+type Me = { email: string; org: string; role: 'owner' | 'member' };
+const MeContext = createContext<Me & { reload: () => void }>({ email: '', org: '', role: 'member', reload: () => {} });
 export const useMe = () => useContext(MeContext);
 
 type Badges = { faults: number; late: number };

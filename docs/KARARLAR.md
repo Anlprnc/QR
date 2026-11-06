@@ -10,3 +10,6 @@
 - SEO: Google odaklı (TR payı ~%77), Yandex ~%22; Search Console + Bing + Yandex, IndexNow, JSON-LD
 - İçerik: haftada en fazla 2 yazı, şablonlanmış şehir/sektör sayfası yok
 - Yayın öncesi her şey Kral'ın onayından geçer
+- Roller: `owner` (kurumu ilk kaydeden) ve `member`; ekip/atölye adı yalnızca owner
+- Turnstile: `TURNSTILE_SECRET` tanımlıysa QR formunda zorunlu, tanımlı değilse atlanır (yerel)
+- Ücretli hiçbir hizmet kullanılmaz; ücretli plana geçiş kullanıcı kararıdır

@@ -36,3 +36,6 @@ Arıza panosu (atama, çözüm notu, geçmiş notları, arama, sesli uyarı), ma
 makine detay sayfası, planlı bakım, raporlar (trend, duruş süresi, CSV), ekip yönetimi, TV modu (`/tv`),
 yeni arızada e-posta bildirimi (Resend), QR formunda rate limit.
 Yeni migrasyon (`0004_cmms.sql`) için `npm run db:migrate` çalıştırın.
+
+Canlıya alma: `docs/DEPLOY.md`. Yerel sırlar için `app/.dev.vars.example`. Test: `node app/scripts/smoke.mjs` (yerel `wrangler dev` çalışırken).
+Roller: atölyeyi ilk kaydeden kullanıcı yönetici; yalnızca yönetici ekip ve atölye adını değiştirir.

@@ -5,8 +5,11 @@ import { z } from 'zod';
 import { randomToken, sha256, sixDigitCode } from './util';
 import { sendMail } from './mail';
 
-export type Env = { DB: D1Database; RESEND_API_KEY?: string; MAIL_FROM?: string; AUTH_PEPPER?: string };
-export type Session = { userId: string; orgId: string };
+export type Env = {
+  DB: D1Database; RESEND_API_KEY?: string; MAIL_FROM?: string; AUTH_PEPPER?: string;
+  TURNSTILE_SITE_KEY?: string; TURNSTILE_SECRET?: string;
+};
+export type Session = { userId: string; orgId: string; role: 'owner' | 'member' };
 export type AppEnv = { Bindings: Env; Variables: { session: Session } };
 
 const CODE_TTL = 10 * 60_000;
@@ -26,14 +29,21 @@ async function sendCode(env: Env, email: string, code: string) {
 export const requireSession: MiddlewareHandler<AppEnv> = async (c, next) => {
   const token = getCookie(c, COOKIE);
   if (!token) return c.json({ error: 'unauthorized' }, 401);
-  const row = await c.env.DB.prepare('SELECT user_id, org_id, expires_at FROM sessions WHERE token_hash = ?')
-    .bind(await sha256(token)).first<{ user_id: string; org_id: string; expires_at: number }>();
+  const row = await c.env.DB.prepare(
+    `SELECT s.user_id, s.org_id, s.expires_at, u.role FROM sessions s
+       JOIN users u ON u.id = s.user_id AND u.org_id = s.org_id WHERE s.token_hash = ?`,
+  ).bind(await sha256(token)).first<{ user_id: string; org_id: string; expires_at: number; role: 'owner' | 'member' }>();
   if (!row || row.expires_at < Date.now()) return c.json({ error: 'unauthorized' }, 401);
-  c.set('session', { userId: row.user_id, orgId: row.org_id });
+  c.set('session', { userId: row.user_id, orgId: row.org_id, role: row.role });
   await next();
 };
 
 const emailSchema = z.string().trim().toLowerCase().email().max(200);
+
+export const requireOwner: MiddlewareHandler<AppEnv> = async (c, next) => {
+  if (c.get('session').role !== 'owner') return c.json({ error: 'forbidden' }, 403);
+  await next();
+};
 
 export const auth = new Hono<AppEnv>();
 
@@ -82,7 +92,7 @@ auth.post('/verify', zValidator('json', z.object({ email: emailSchema, code: z.s
     const userId = crypto.randomUUID();
     await c.env.DB.batch([
       c.env.DB.prepare('INSERT INTO organizations (id, name, created_at) VALUES (?,?,?)').bind(orgId, 'Yeni atölye', now),
-      c.env.DB.prepare('INSERT INTO users (id, email, org_id, created_at) VALUES (?,?,?,?)').bind(userId, email, orgId, now),
+      c.env.DB.prepare("INSERT INTO users (id, email, org_id, role, created_at) VALUES (?,?,?,'owner',?)").bind(userId, email, orgId, now),
     ]);
     user = { id: userId, org_id: orgId };
   }

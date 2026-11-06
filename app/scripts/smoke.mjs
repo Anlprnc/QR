@@ -43,6 +43,14 @@ check('B, A\'nın bakım görevini işaretleyemez', (await Bc(`/maintenance/${ta
 check('A bakım görevini işaretler', (await A(`/maintenance/${task.id}/done`, 'POST', {})).status === 200);
 check('B, A\'nın ekibini silemez', (await Bc(`/team/${(await A('/team')).json[0].id}`, 'DELETE')).status === 404);
 check('CSV formül enjeksiyonu engellenir', (await A('/export/tickets.csv')).text.includes(`"'=HYPERLINK`));
+const members = (await A('/team', 'POST', { email: `m${stamp}@smoke.test` })).status === 201;
+check('Yönetici ekip üyesi ekler', members);
+const M = call(await login(`m${stamp}@smoke.test`));
+check('Üye /me rolü member', (await M('/me')).json.role === 'member');
+check('Üye ekip üyesi ekleyemez', (await M('/team', 'POST', { email: `z${stamp}@smoke.test` })).status === 403);
+check('Üye atölye adını değiştiremez', (await M('/org', 'PATCH', { name: 'Ele geçirildi' })).status === 403);
+check('Üye ekipten kimseyi çıkaramaz', (await M(`/team/${(await A('/team')).json[0].id}`, 'DELETE')).status === 403);
+check('Üye arızaları görür', Array.isArray((await M('/tickets')).json));
 check('Oturumsuz istek reddedilir', (await call('')('/tickets')).status === 401);
 await A(`/tickets/${ticketId}`, 'PATCH', { status: 'resolved', resolution: 'ok' });
 check('Geçersiz durum geçişi reddedilir', (await A(`/tickets/${ticketId}`, 'PATCH', { status: 'in_progress' })).status === 409);

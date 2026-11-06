@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
-import { auth, requireSession, type AppEnv } from './auth';
+import { auth, requireOwner, requireSession, type AppEnv } from './auth';
 import { allow, csvCell, randomToken } from './util';
 import { sendMail } from './mail';
 
@@ -18,13 +18,25 @@ app.get('/api/q/:token', async (c) => {
        FROM machines m WHERE m.qr_token = ? AND m.archived_at IS NULL`,
   ).bind(c.req.param('token')).first<{ name: string; openCount: number }>();
   if (!m) return c.json({ error: 'not_found' }, 404);
-  return c.json({ machine: m.name, openCount: m.openCount });
+  return c.json({ machine: m.name, openCount: m.openCount, turnstileSiteKey: c.env.TURNSTILE_SITE_KEY ?? null });
 });
+
+// Cloudflare Turnstile (ücretsiz). Anahtarlar tanımlı değilse doğrulama atlanır (yerel geliştirme).
+async function turnstileOk(env: AppEnv['Bindings'], token: string | undefined, ip: string) {
+  if (!env.TURNSTILE_SECRET) return true;
+  if (!token) return false;
+  const r = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    method: 'POST',
+    body: new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: token, remoteip: ip }),
+  }).catch(() => null);
+  return !!r && ((await r.json().catch(() => ({}))) as { success?: boolean }).success === true;
+}
 
 const reportSchema = z.object({
   description: z.string().trim().min(3).max(1000),
   reporterName: z.string().trim().max(80).optional(),
   machineStopped: z.boolean().optional(),
+  turnstileToken: z.string().max(2048).optional(),
 });
 
 app.post('/api/q/:token/tickets', zValidator('json', reportSchema), async (c) => {
@@ -37,7 +49,8 @@ app.post('/api/q/:token/tickets', zValidator('json', reportSchema), async (c) =>
   if (!m) return c.json({ error: 'not_found' }, 404);
   if (!(await allow(c.env.DB, `qtk:${token}`, 40, 3600_000))) return c.json({ error: 'too_many_requests' }, 429);
   if (Math.random() < 0.02) c.executionCtx.waitUntil(c.env.DB.prepare('DELETE FROM rate_limits WHERE window_start < ?').bind(Date.now() - 86_400_000).run().then(() => {}));
-  const { description, reporterName, machineStopped } = c.req.valid('json');
+  const { description, reporterName, machineStopped, turnstileToken } = c.req.valid('json');
+  if (!(await turnstileOk(c.env, turnstileToken, ip))) return c.json({ error: 'captcha_failed' }, 403);
   const id = crypto.randomUUID();
   const now = Date.now();
   await c.env.DB.batch([
@@ -67,12 +80,12 @@ api.use('*', requireSession);
 api.get('/me', async (c) => {
   const { userId, orgId } = c.get('session');
   const row = await c.env.DB.prepare(
-    'SELECT u.email, o.name AS org FROM users u JOIN organizations o ON o.id = u.org_id WHERE u.id = ? AND o.id = ?',
+    'SELECT u.email, u.role, o.name AS org FROM users u JOIN organizations o ON o.id = u.org_id WHERE u.id = ? AND o.id = ?',
   ).bind(userId, orgId).first();
   return c.json(row);
 });
 
-api.patch('/org', zValidator('json', z.object({ name: z.string().trim().min(2).max(80) })), async (c) => {
+api.patch('/org', requireOwner, zValidator('json', z.object({ name: z.string().trim().min(2).max(80) })), async (c) => {
   const { orgId } = c.get('session');
   await c.env.DB.prepare('UPDATE organizations SET name = ? WHERE id = ?').bind(c.req.valid('json').name, orgId).run();
   return c.json({ ok: true });
@@ -81,25 +94,25 @@ api.patch('/org', zValidator('json', z.object({ name: z.string().trim().min(2).m
 // ---- Ekip ----
 api.get('/team', async (c) => {
   const { orgId, userId } = c.get('session');
-  const { results } = await c.env.DB.prepare('SELECT id, email, created_at AS createdAt FROM users WHERE org_id = ? ORDER BY created_at')
+  const { results } = await c.env.DB.prepare('SELECT id, email, role, created_at AS createdAt FROM users WHERE org_id = ? ORDER BY created_at')
     .bind(orgId).all<{ id: string }>();
   return c.json(results.map((u) => ({ ...u, you: u.id === userId })));
 });
 
-api.post('/team', zValidator('json', z.object({ email: z.string().trim().toLowerCase().email().max(200) })), async (c) => {
+api.post('/team', requireOwner, zValidator('json', z.object({ email: z.string().trim().toLowerCase().email().max(200) })), async (c) => {
   const { orgId } = c.get('session');
   const { email } = c.req.valid('json');
   const existing = await c.env.DB.prepare('SELECT org_id FROM users WHERE email = ?').bind(email).first<{ org_id: string }>();
   if (existing) return c.json({ error: existing.org_id === orgId ? 'already_member' : 'email_taken' }, 409);
   const org = await c.env.DB.prepare('SELECT name FROM organizations WHERE id = ?').bind(orgId).first<{ name: string }>();
-  await c.env.DB.prepare('INSERT INTO users (id, email, org_id, created_at) VALUES (?,?,?,?)')
+  await c.env.DB.prepare('INSERT INTO users (id, email, org_id, role, created_at) VALUES (?,?,?,\'member\',?)')
     .bind(crypto.randomUUID(), email, orgId, Date.now()).run();
   c.executionCtx.waitUntil(sendMail(c.env, email, `${org?.name ?? 'Atölye'} sizi ArızaQR'a ekledi`,
     `Giriş yapmak için ${new URL(c.req.url).origin}/giris adresinde bu e-posta adresini yazın; size tek kullanımlık kod gelecek.`).catch(() => {}));
   return c.json({ ok: true }, 201);
 });
 
-api.delete('/team/:id', async (c) => {
+api.delete('/team/:id', requireOwner, async (c) => {
   const { orgId, userId } = c.get('session');
   const id = c.req.param('id');
   if (id === userId) return c.json({ error: 'cannot_remove_self' }, 409);
